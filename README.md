@@ -4,7 +4,7 @@ Geotag photos from GPSless cameras with linearly-interpolated GPX tracklog data 
 
 ## How to use
 
-To run:
+Basic usage:
 
 ```
 gpxify
@@ -15,9 +15,22 @@ from a directory containing both a GPX track log (or logs) and a photo (or photo
 ## Options
 
 ```
---tracks='' \\ Optional, specify a custom track log (or directory of tracklogs).
---photos='' \\ Optional, directory of photos.
---note=''   \\ Optional, append a note to the UserComment EXIF field.
+-t, --tracks "" \\ Optional, specify a custom track log (or directory of tracklogs).
+-p, --photos "" \\ Optional, directory of photos.
+-n, --note ""   \\ Optional, append a note to the UserComment EXIF field.
+```
+
+Usage:
+
+```
+gpxify [[-t|--tracks] option_argument][[-p|--photos] option_argument][[[-n|--note] option_argument]
+```
+
+### Future options
+
+```
+-r, --recurse
+-o, --overwrite
 ```
 
 # Accuracy
