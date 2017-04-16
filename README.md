@@ -43,6 +43,11 @@ The accuracy of gpxify is determined by:
 
 In most situations, photos geotagged by GPXify will be at least as accurate, if not moreso, than the GPS position recorded by a camera, provided a reasonable attempt is to made to optimize the three variables above.
 
-Photos where there is no GPX data available cannot be tagged.
-
 # How it works
+
+# Addendums
+
+* Photos where there is no GPX data available cannot be tagged.
+* Photos taken when multiple GPX tracklog files are provided that overlap chonologically will be geotagged from the tracklog file which began recording first.
+* Only `.gpx` tracklog files are supported.
+* Only `.jpg` or `.jpeg` photos can be geotagged.

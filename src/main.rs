@@ -1,3 +1,5 @@
+extern crate chrono;
+
 mod input;
 mod gpx;
 
