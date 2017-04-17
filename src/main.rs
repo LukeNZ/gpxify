@@ -9,8 +9,8 @@ fn main() {
     let settings : input::CmdLineSettings = input::get_cmd_line_opts();
 
     // Open & read the GPX tracklog, producing a BTreeMap, ordered by time.
-    gpx::parse(settings);
-    //let gpx : gpx::GpxData = gpx::parse(settings);
+    gpx::get(settings);
+    //let gpx : Vec<GpxTrackSegment> = gpx::get(settings);
 
     // Geotag all the photos we have.
     //photos::geotag(gpx);

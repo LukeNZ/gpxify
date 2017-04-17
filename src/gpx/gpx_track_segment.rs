@@ -3,7 +3,13 @@ use chrono::{DateTime, UTC};
 use super::GpxTrackPoint;
 
 pub struct GpxTrackSegment {
-    start: DateTime<UTC>,
-    end: DateTime<UTC>,
-    points: BTreeMap<DateTime<UTC>, GpxTrackPoint>
+    start: Option<DateTime<UTC>>,
+    end: Option<DateTime<UTC>>,
+    points: Option<BTreeMap<DateTime<UTC>, GpxTrackPoint>>
+}
+
+impl GpxTrackSegment {
+    pub fn new() -> GpxTrackSegment {
+        GpxTrackSegment { start: None, end: None, points: None }
+    }
 }

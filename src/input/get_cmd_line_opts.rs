@@ -8,7 +8,7 @@ use super::CmdLineSettings;
 /// them), a path to a directory of images to be geotagged, and a note to append to each geotagged
 /// image.
 ///
-/// Returns a CmdLineSettings struct representing the options passed in to the application.
+/// Returns `CmdLineSettings` - A struct representing the options passed in to the application.
 ///
 pub fn get_cmd_line_opts() -> CmdLineSettings {
     let mut settings : CmdLineSettings = CmdLineSettings::new();
