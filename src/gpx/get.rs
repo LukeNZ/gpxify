@@ -5,6 +5,7 @@ use std::io::{BufReader, Bytes, Error, Read};
 use std::fs::{File, ReadDir};
 use std::ffi::OsStr;
 use super::{GpxTrackSegment};
+use super::parser::GpxFileParser;
 
 ///
 /// Get the contents of all the GPX files.
@@ -67,9 +68,10 @@ fn get_all_paths_to_gpx_files(path_to_directory: &Path) -> Result<Vec<PathBuf>, 
 fn get_track_from_file(path_to_file: &Path) -> Result<String, Error> {
     let file = File::open(path_to_file);
     if let Ok(foo) = file {
-        let mut contents = String::new();
-        let reader = BufReader::new(foo);
-        parse_gpx_file(reader);
+        let mut contents : String = String::new();
+        let reader : BufReader<File> = BufReader::new(foo);
+
+        GpxFileParser::parse(reader);
         Ok(contents)
     } else {
         Err(file.unwrap_err())
