@@ -16,5 +16,5 @@ fn main() {
     }
 
     // Geotag all the photos we have with the GPS data we've extracted.
-    photos::geotag(gpx);
+    //photos::geotag(gpx);
 }

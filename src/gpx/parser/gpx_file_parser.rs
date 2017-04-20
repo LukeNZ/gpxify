@@ -1,7 +1,7 @@
 use std::io::{BufReader, Bytes, Error, Read};
 use std::fs::{File, ReadDir};
 use std::iter::Peekable;
-use super::super::GpxTrackSegment;
+use super::super::{GpxTrackPoint, GpxTrackSegment};
 use super::GpxParserError;
 
 ///
@@ -45,15 +45,7 @@ impl<T: Read> GpxFileParser<T> {
         // Parse <trkseg open tag, excluding the last less than, as a valid XML document
         // may contain as much whitepace as needed between the tag name and the less than
         // character.
-        let trkseg_open_tag : &str = "<trkseg";
-
-        for byte in trkseg_open_tag.bytes() {
-            if let Some(Ok(next_byte)) = self.iter.next() {
-                if byte != next_byte {
-                    return None;
-                }
-            }
-        }
+        self.parse_string("<trkseg", false);
 
         // We can safely assume that if we've reached this point, a trkseg element was intended,
         // so we create a GpxTrackSegment struct. Any errors from now will result in the return
@@ -69,19 +61,10 @@ impl<T: Read> GpxFileParser<T> {
         }
 
         // Parse everything inside the trkseg
-        self.parse_trkseg_tag_inner();
-
-        let trkseg_close_tag : &str = "</trkseg>";
-        for byte in trkseg_close_tag.bytes() {
-            if let Some(Ok(next_byte)) = self.iter.next() {
-                if byte != next_byte {
-                    return None;
-                }
-            }
-        }
+        self.parse_trkseg_tag_inner(gpx_track_segment);
 
         // If we've got to this point, we've successfully parsed a track segment and its containing
-        // points, return it.
+        // points.
         None
     }
 
@@ -129,30 +112,59 @@ impl<T: Read> GpxFileParser<T> {
     ///
     ///
     ///
-    fn parse_trkseg_tag_inner(self) {
+    fn parse_trkseg_tag_inner(self, gpx_track_segment: GpxTrackSegment) {
         // Parse any whitespace until we find the first tag.
         self.parse_whitespace();
+
+        // The first child of a trkseg is guaranteed to be a trkpt tag.
+        self.parse_trkpt_tag();
     }
 
     ///
     ///
     ///
-    fn parse_trkpt_tag(self) {
+    fn parse_trkpt_tag(self) -> Option<Result<GpxTrackPoint, GpxParserError>> {
+        // Parse the opening of the <trkpt> tag.
+        self.parse_string("<trkpt", false);
 
+        // Parse any whitespace
+        self.parse_whitespace();
+
+        // Parse the latitute attribute
+        self.parse_lat_attr();
+
+        // Parse any whitespace
+        self.parse_whitespace();
+
+        // Parse the longitude attribute
+        self.parse_lon_attr();
+
+        // Parse whitespace
+        self.parse_whitespace();
+
+        // Close the tag.
+        self.parse_lt_token();
+
+        // Parse anything inside the trkpt tag.
+        self.parse_trkpt_tag_inner();
     }
 
     ///
     ///
     ///
     fn parse_lat_attr(self) {
+        parse_string("lat=\"", true);
 
+        parse_string("\"", true);
     }
 
     ///
     ///
     ///
     fn parse_lon_attr(self) {
+        parse_string("lon=\"", true);
 
+        parse_string("\"", true);
     }
 
     ///
@@ -187,6 +199,27 @@ impl<T: Read> GpxFileParser<T> {
     ///
     ///
     fn parse_time_tag_inner(self) {
+
+    }
+
+    ///
+    ///
+    ///
+    fn parse_string(self, to_parse: &str, mandatory: bool) -> Option<Result<(), GpxParserError>> {
+        for byte in to_parse.bytes() {
+            if let Some(Ok(next_byte)) = self.iter.next() {
+                if byte != next_byte {
+                    return None;
+                }
+            }
+        }
+        Some(Ok(()))
+    }
+
+    ///
+    ///
+    ///
+    fn parse_coordinate(self, min_bound: f32, max_bound: f32) -> Result<f32, GpxParserError> {
 
     }
 }

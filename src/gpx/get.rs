@@ -65,14 +65,10 @@ fn get_all_paths_to_gpx_files(path_to_directory: &Path) -> Result<Vec<PathBuf>, 
 ///
 /// Returns `Result<String, Error>`
 ///
-fn get_track_from_file(path_to_file: &Path) -> Result<String, Error> {
+fn get_track_from_file(path_to_file: &Path) -> Result<Vec<GpxTrackSegment>, Error> {
     let file = File::open(path_to_file);
     if let Ok(foo) = file {
-        let mut contents : String = String::new();
-        let reader : BufReader<File> = BufReader::new(foo);
-
-        GpxFileParser::parse(reader);
-        Ok(contents)
+        GpxFileParser::parse(BufReader::new(foo))
     } else {
         Err(file.unwrap_err())
     }
